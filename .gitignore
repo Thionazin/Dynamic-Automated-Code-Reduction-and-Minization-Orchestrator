@@ -70,3 +70,6 @@ fabric.properties
 cre-model.dat
 cre-history.csv
 cre-kpi-report.txt
+
+# macOS Finder metadata
+.DS_Store
