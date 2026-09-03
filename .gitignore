@@ -73,3 +73,9 @@ cre-kpi-report.txt
 
 # macOS Finder metadata
 .DS_Store
+
+# Harness and benchmark build output
+harness/out/
+harness/reports/
+benchmarks/out/
+benchmarks/results/
