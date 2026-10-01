@@ -79,3 +79,8 @@ harness/out/
 harness/reports/
 benchmarks/out/
 benchmarks/results/
+
+# Packaged and Maven build output
+dist/
+build/
+target/
