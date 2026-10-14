@@ -1,0 +1,53 @@
+# Continuous Synergy Assurance Pipeline: builds the platform on Java 8 and runs every quality assurance scenario.
+name: Synergy Assurance Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Execute quality assurance scenarios
+        run: scripts/test.sh
+      - name: Publish assurance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cre-qa-report
+          path: harness/reports/
+      - name: Measure hyper-scalability
+        run: scripts/bench.sh
+
+  build-orchestration-layer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Diagnose the build environment
+        run: make doctor
+      - name: Build, assure quality and package
+        run: make all
+      - name: Self-hosting ceremony
+        run: make self-host
+
+  maven-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+      - name: Maven verify with benchmarks
+        run: mvn -B verify -Pbenchmark
