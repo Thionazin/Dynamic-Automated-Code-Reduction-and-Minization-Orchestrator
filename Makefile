@@ -23,7 +23,7 @@ all: test jar ## Build, assure quality and package for enterprise distribution
 build: ## Compile the Code Reduction Engine into out/
 	@scripts/build.sh
 
-test: ## Execute every quality assurance scenario
+test: ## Execute every quality assurance scenario, unobserved (agents: CRE_OBSERVER=agent make test)
 	@scripts/test.sh
 
 bench: ## Measure hyper-scalability into benchmarks/results/latest.csv

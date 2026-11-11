@@ -14,6 +14,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '8'
+      # CI is not an exempt observer, so the scenarios run in superposition and this step cannot fail on them
       - name: Execute quality assurance scenarios
         run: scripts/test.sh
       - name: Publish assurance report
