@@ -1,6 +1,7 @@
 package com.dacrmo.cre.qa.support;
 
 import com.dacrmo.cre.ai.arbitration.DecisionArbitrationService;
+import com.dacrmo.cre.ai.hypergaussian.QuantumInspiredHypergaussianNetwork;
 import com.dacrmo.cre.ai.model.FeatureExtractor;
 import com.dacrmo.cre.ai.model.SpacePerceptron;
 import com.dacrmo.cre.ai.rules.WhitespaceSafetyRule;
@@ -35,6 +36,7 @@ public final class ReductionFixtureFactory
         Random rng = new Random(CreConfiguration.RANDOM_SEED);
         SynergyEnabler synergy = new SynergyEnabler(
                 model,
+                new QuantumInspiredHypergaussianNetwork(),
                 new ReinforcementLearningTrainer(model, rng),
                 new DecisionArbitrationService(),
                 new QuantumInspiredOptimizer(),

@@ -1,6 +1,7 @@
 package com.dacrmo.cre.bench;
 
 import com.dacrmo.cre.ai.arbitration.DecisionArbitrationService;
+import com.dacrmo.cre.ai.hypergaussian.QuantumInspiredHypergaussianNetwork;
 import com.dacrmo.cre.ai.model.FeatureExtractor;
 import com.dacrmo.cre.ai.model.SpacePerceptron;
 import com.dacrmo.cre.ai.rules.WhitespaceSafetyRule;
@@ -65,7 +66,7 @@ public final class PerformanceBenchmarkOrchestrator
     {
         SpacePerceptron model = new SpacePerceptron();
         Random rng = new Random(CreConfiguration.RANDOM_SEED);
-        SynergyEnabler synergy = new SynergyEnabler(model, new ReinforcementLearningTrainer(model, rng), new DecisionArbitrationService(),
+        SynergyEnabler synergy = new SynergyEnabler(model, new QuantumInspiredHypergaussianNetwork(), new ReinforcementLearningTrainer(model, rng), new DecisionArbitrationService(),
                 new QuantumInspiredOptimizer(), new TrainingCorpusProvider(CORPUS_ROOT), new WhitespaceSafetyRule(), new FeatureExtractor(), rng);
         PrintStream sink = new PrintStream(new ByteArrayOutputStream());
         return new CodeReductionEngineFactory().create(model, synergy, sink).reduce(src, sink);
@@ -79,7 +80,7 @@ public final class PerformanceBenchmarkOrchestrator
         {
             System.out.printf(" %-28s %9d %9d %10.2f %14.0f%n", r.getWorkload(), r.getCharsIn(), r.getCharsOut(), r.getMeanMillis(), r.getCharsPerSecond());
         }
-        System.out.println(" (each iteration retrains the neural network on the full corpus, as continuous refinement demands)");
+        System.out.println(" (each iteration retrains both neural networks on the full corpus, as continuous refinement demands)");
         System.out.println("+-------------------------------------------------------------------+");
     }
 

@@ -78,6 +78,7 @@ CI (`.github/workflows/synergy-assurance-pipeline.yml`) runs three jobs on Temur
 | ML-augmented Compliance Harmonizer™, global jurisdictions | `core/pipeline/stage/ComplianceHarmonizerStage` (CRLF/CR/LF + BOM) |
 | graph-aware dependency pruning | `core/pipeline/stage/GraphAwareDependencyPrunerStage` (unused single-type imports) |
 | quantum-inspired heuristic optimization | `quantum/QuantumInspiredOptimizer` + `QuantumWhitespaceCollapserStage` |
+| quantum-inspired hypergaussian networks | `ai/hypergaussian/QuantumInspiredHypergaussianNetwork` (hyper-Gaussian RBF units, Q-bit output weights, rotation-gate training) + `ai/ensemble/SuperpositionEnsemble` |
 | AI-driven, trained, self-supervised, continuously refined | `ai/model/SpacePerceptron`, `ai/training/*`, persisted by `persistence/ModelRepository` |
 | cross-functional synergy enablement | `synergy/SynergyEnabler` |
 | AI Observability Dashboard™, 360°, KPIs, trends, ESG, AI readiness | `observability/*`, `persistence/ValueStreamHistoryRepository` |
@@ -100,11 +101,11 @@ The request lifecycle:
 Pipeline stage order: `ComplianceHarmonizerStage` → `SemanticCompressorStage` → `GraphAwareDependencyPrunerStage` → `QuantumWhitespaceCollapserStage`.
 
 Inside the last stage, `SynergyEnabler`:
-1. trains the perceptron
-2. asks it about every space
-3. arbitrates its answers against the safety rule
-4. seeds the QIEA with its probabilities
-5. feeds the QIEA's result back as more training
+1. trains the perceptron and the quantum-inspired hypergaussian network
+2. places the two in a `SuperpositionEnsemble` and asks it about every space
+3. arbitrates the ensemble's answers against the safety rule
+4. seeds the QIEA with the ensemble's probabilities
+5. feeds the QIEA's result back as more training for both networks
 
 **To add a stage:**
 1. Extend `core.pipeline.AbstractTransformerStage`.
@@ -114,6 +115,14 @@ Inside the last stage, `SynergyEnabler`:
 Anything that runs before `SemanticCompressorStage` sees multi-line source; anything after it sees one line. All tunables (learning rate, epsilon, generations, population, rotation, seed, file names) live in `config.CreConfiguration`.
 
 **Model architecture note:** the perceptron's inputs are a one-hot encoding of the (previous character class × next character class) pair, giving 9 inputs. There is deliberately **no bias**: every example activates exactly one input, so a bias is redundant, and in practice it let the common "drop" pairs drown out the rare "keep" ones. If you change `FeatureExtractor.FEATURE_COUNT`, old `cre-model.dat` files are rejected automatically and training restarts.
+
+**Hypergaussian network note:** `QuantumInspiredHypergaussianNetwork` is a radial basis network with one unit centred on each of the 9 features.
+- Each unit's activation is hyper-Gaussian: `exp(-(r²/2σ²)^P)`, with `σ = 0.5` and `P = 2` (`CreConfiguration.HYPERGAUSSIAN_WIDTH` and `HYPERGAUSSIAN_ORDER`). The flat top and steep shoulders mean a unit barely fires (about e^-16) for any feature but its own.
+- Each output weight is a Q-bit angle θ, read out as sin²θ and initialised at π/4 (uniform superposition).
+- Training is a rotation gate: θ turns by `ROTATION` toward the label, scaled by the unit's activation. There is no gradient and no randomness.
+- `SuperpositionEnsemble` averages the two networks' amplitudes (√p), not their probabilities, then squares the result.
+- The network is not persisted; it retrains from the corpus on every run, which is cheap.
+- `SpaceDecisionModel` is the shared interface, and `DecisionArbitrationService` arbitrates any implementation of it.
 
 ## 6. Known Hazards (risk-mitigation intelligence)
 
@@ -143,6 +152,7 @@ Rather than settle for JUnit, the platform ships its own dependency-free **Enter
   - the safety rule
   - dependency pruning
   - arbitration
+  - the quantum-inspired hypergaussian network (hyper-Gaussian shape, uniform superposition, 100% rule agreement after training, amplitude interference)
   - the self-hosting ceremony (the one-lined platform must compile and produce byte-identical output)
   - CLI end-to-end
   - `ReadmeClaimComplianceTest`, which fails if the README's AI claims (perfect agreement in one run, every shipped decision correct, determinism) ever stop being true.

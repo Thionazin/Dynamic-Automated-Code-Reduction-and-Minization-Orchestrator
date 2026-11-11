@@ -1,7 +1,7 @@
 package com.dacrmo.cre.ai.model;
 
 // a single-layer neural network that predicts whether a space should be kept
-public class SpacePerceptron
+public class SpacePerceptron implements SpaceDecisionModel
 {
     private final double[] weights = new double[FeatureExtractor.FEATURE_COUNT];
 
@@ -15,11 +15,6 @@ public class SpacePerceptron
         double sum = 0;
         for (int i = 0; i < weights.length; i++) sum += weights[i] * x[i];
         return 1 / (1 + Math.exp(-sum));
-    }
-
-    public boolean decide(double[] x)
-    {
-        return predict(x) > 0.5;
     }
 
     // mean certainty over the four canonical character-class pairings

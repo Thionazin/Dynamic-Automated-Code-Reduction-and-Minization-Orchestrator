@@ -9,8 +9,11 @@ public class RunMetrics
     private final int episodes;
     private final int acceptedDecisions;
     private final int overruledDecisions;
+    private final int hypergaussianUnits;
+    private final double hypergaussianCertainty;
 
-    public RunMetrics(String before, String after, long cpuNanos, double rewardRate, int episodes, int acceptedDecisions, int overruledDecisions)
+    public RunMetrics(String before, String after, long cpuNanos, double rewardRate, int episodes, int acceptedDecisions, int overruledDecisions,
+            int hypergaussianUnits, double hypergaussianCertainty)
     {
         this.before = before;
         this.after = after;
@@ -19,6 +22,8 @@ public class RunMetrics
         this.episodes = episodes;
         this.acceptedDecisions = acceptedDecisions;
         this.overruledDecisions = overruledDecisions;
+        this.hypergaussianUnits = hypergaussianUnits;
+        this.hypergaussianCertainty = hypergaussianCertainty;
     }
 
     public String getBefore()
@@ -54,5 +59,15 @@ public class RunMetrics
     public int getOverruledDecisions()
     {
         return overruledDecisions;
+    }
+
+    public int getHypergaussianUnits()
+    {
+        return hypergaussianUnits;
+    }
+
+    public double getHypergaussianCertainty()
+    {
+        return hypergaussianCertainty;
     }
 }

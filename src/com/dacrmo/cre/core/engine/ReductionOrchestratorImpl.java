@@ -1,6 +1,7 @@
 package com.dacrmo.cre.core.engine;
 
 import com.dacrmo.cre.ai.arbitration.DecisionArbitrationService;
+import com.dacrmo.cre.ai.hypergaussian.QuantumInspiredHypergaussianNetwork;
 import com.dacrmo.cre.ai.model.FeatureExtractor;
 import com.dacrmo.cre.ai.model.SpacePerceptron;
 import com.dacrmo.cre.ai.rules.WhitespaceSafetyRule;
@@ -30,8 +31,10 @@ public class ReductionOrchestratorImpl implements ReductionOrchestrator
         SpacePerceptron model = modelRepository.load();
         Random rng = new Random(CreConfiguration.RANDOM_SEED);
         ReinforcementLearningTrainer trainer = new ReinforcementLearningTrainer(model, rng);
+        QuantumInspiredHypergaussianNetwork hypergaussianNetwork = new QuantumInspiredHypergaussianNetwork();
         SynergyEnabler synergy = new SynergyEnabler(
                 model,
+                hypergaussianNetwork,
                 trainer,
                 new DecisionArbitrationService(),
                 new QuantumInspiredOptimizer(),
@@ -46,7 +49,8 @@ public class ReductionOrchestratorImpl implements ReductionOrchestrator
         modelRepository.save(model);
         long cpuNanos = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - cpuStart;
         RunMetrics metrics = new RunMetrics(src, result, cpuNanos, trainer.getRewardRate(), trainer.getEpisodes(),
-                synergy.getAcceptedDecisions(), synergy.getOverruledDecisions());
+                synergy.getAcceptedDecisions(), synergy.getOverruledDecisions(),
+                hypergaussianNetwork.getUnitCount(), hypergaussianNetwork.certainty());
         new ObservabilityDashboard(
                 new ValueStreamHistoryRepository(CreConfiguration.HISTORY_FILE),
                 new KpiReportWriter(CreConfiguration.KPI_REPORT_FILE)).render(metrics, log);

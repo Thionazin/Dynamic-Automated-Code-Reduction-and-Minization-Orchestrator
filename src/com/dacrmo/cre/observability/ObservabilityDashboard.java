@@ -1,5 +1,6 @@
 package com.dacrmo.cre.observability;
 
+import com.dacrmo.cre.config.CreConfiguration;
 import com.dacrmo.cre.persistence.ValueStreamHistoryRepository;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class ObservabilityDashboard
         report.add(" [270-360] Value-stream optimization trend:  " + history.recordAndCompare(linesIn, charsIn, charsOut, reduction));
         report.add(" AI readiness maturity:  ~" + tokensIn + " -> ~" + tokensOut + " LLM tokens, level " + (level + 1) + " (" + MATURITY_LEVELS[level] + ")");
         report.add(" Neural network decisions:  " + metrics.getAcceptedDecisions() + " accepted, " + metrics.getOverruledDecisions() + " overruled by safety rule (" + String.format("%.1f", autonomy) + "% autonomy)");
+        report.add(" Quantum-inspired hypergaussian network:  " + metrics.getHypergaussianUnits() + " hyper-Gaussian units (order "
+                + (int) CreConfiguration.HYPERGAUSSIAN_ORDER + "), " + String.format("%.1f", metrics.getHypergaussianCertainty() * 100) + "% mean Q-bit certainty");
         report.add(" Neural network reward rate:  " + String.format("%.1f", metrics.getRewardRate() * 100) + "% over " + metrics.getEpisodes() + " episodes");
         report.add("+----------------------------------------------------------------+");
 

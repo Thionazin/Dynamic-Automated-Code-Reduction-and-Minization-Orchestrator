@@ -18,6 +18,8 @@ public final class CreConfiguration
     public static final int POPULATION = 4;
     public static final double ROTATION = 0.05 * Math.PI;
     public static final long RANDOM_SEED = 42;
+    public static final double HYPERGAUSSIAN_WIDTH = 0.5;
+    public static final double HYPERGAUSSIAN_ORDER = 2;
 
     private CreConfiguration()
     {

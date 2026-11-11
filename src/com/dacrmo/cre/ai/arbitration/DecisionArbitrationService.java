@@ -1,12 +1,12 @@
 package com.dacrmo.cre.ai.arbitration;
 
-import com.dacrmo.cre.ai.model.SpacePerceptron;
+import com.dacrmo.cre.ai.model.SpaceDecisionModel;
 
-// the neural network's decision is used unless it contradicts the safety rule,
+// the neural network's (or ensemble's) decision is used unless it contradicts the safety rule,
 // in which case the learned result is thrown out and the rule's answer is used
 public class DecisionArbitrationService
 {
-    public ArbitrationResult arbitrate(SpacePerceptron model, double[][] features, boolean[] ruleAnswers)
+    public ArbitrationResult arbitrate(SpaceDecisionModel model, double[][] features, boolean[] ruleAnswers)
     {
         boolean[] decisions = new boolean[features.length];
         int accepted = 0;
