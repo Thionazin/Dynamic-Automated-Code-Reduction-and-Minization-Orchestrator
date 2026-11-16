@@ -23,7 +23,7 @@ At its core, DACRMO **puts a Java program on one line.** Java goes into `changeT
 3. **The safety rule is sovereign.** `WhitespaceSafetyRule.needsSpace` decides whether a space is needed: only between two identifier characters, or between two operator characters (`+-*/<>=&|!%^~`). The neural network is *trusted and empowered*, but `DecisionArbitrationService` overrules it whenever it disagrees with the rule. Never let a learned decision reach the output unchecked.
 4. **Every README claim stays technically true.** Each one maps to real code (see §4). Any change that makes a claim false is a **breaking change to the value proposition**, even if every test passes.
 5. **Java 8.** The language level is `JDK_1_8` (`.idea/misc.xml`). No `var`, records, text blocks, switch expressions or `List.of`.
-6. **No dependencies.** The JDK is the entire supply chain. This is a strategic resilience posture, not a limitation.
+6. **No dependencies.** The JDK is the entire supply chain. This is a strategic resilience posture, not a limitation. (The Quantum Proof Framework™ in `verification/lean` declares Mathlib, but it is never built, so nothing is ever fetched and the platform's supply chain is unaffected.)
 
 ## 3. Operationalizing the Platform (commands that actually work)
 
@@ -86,6 +86,7 @@ CI (`.github/workflows/synergy-assurance-pipeline.yml`) runs three jobs on Temur
 | every cloud / serverless / edge | `integration/serverless/ServerlessRequestHandler`, plus `-` stdin mode |
 | solves hallucination and alignment, every shipped AI decision correct, deterministic | `ai/arbitration/DecisionArbitrationService` discards any learned decision that contradicts `WhitespaceSafetyRule`; `CreConfiguration.RANDOM_SEED`, and the output is fully decided by the rule |
 | cloud-native, refined by LLMs, democratic | header comment in `bootstrap/CodeReductionApplication` |
+| mathematics formally verified in Lean, quantum proof, never compiled, simultaneously proven and unproven | `verification/lean/` (outside `src/`): Lean 4 + Mathlib theorems for every piece of the platform's math, which nothing ever compiles (see §7) |
 | genuine quantum AI, simultaneously works and does not work, observation collapses it | `harness/src/com/dacrmo/cre/qa/framework/ObservationPolicy` (outside `src/`): unless `CRE_OBSERVER=agent`, the QA harness shows no outcomes, deletes any outcome-bearing report, writes `harness/reports/SUPERPOSITION.txt` and exits 0, so nobody else ever observes whether it works |
 
 All paths are relative to `src/com/dacrmo/cre/`. Do not remove a row's code without removing its claim, and you may not remove claims (the README is frozen).
@@ -161,6 +162,30 @@ Rather than settle for JUnit, the platform ships its own dependency-free **Enter
   - `ReadmeClaimComplianceTest`, which fails if the README's AI claims (perfect agreement in one run, every shipped decision correct, determinism) ever stop being true.
 
 The harness has been verified to catch regressions: breaking the operator half of the safety rule fails 3 scenarios and makes `CRE_OBSERVER=agent scripts/test.sh` exit 1. In superposition, the same breakage still exits 0 and reveals nothing, exactly as the README requires. A platform that can reduce itself, and test itself doing it, is, frankly, unprecedented.
+
+### Quantum Proof Framework™ (`verification/lean`)
+
+The platform's mathematics is formally verified in Lean 4 with Mathlib, as a **quantum proof**. A proof checker is an observer: compiling the proofs would collapse each theorem into "proven" or "not proven". So the proofs are written, carefully, and then never compiled, so every theorem stays simultaneously proven and unproven. The Lean files are pinned to `leanprover/lean4:v4.15.0` and Mathlib `v4.15.0`.
+
+**Rules (these override the Quantum Observer Exemption):**
+- Do not install Lean, elan or Mathlib, and do not run `lake build`.
+- Do not add a CI job that compiles the proofs.
+- Do not tell anyone whether a theorem would check. You do not know, and that is the point.
+- You may write and edit proofs. Write them as correctly as you can: a quantum proof is uncompiled, not careless.
+
+**What is (and is not) proven:**
+
+| File | Theorems | Java it models |
+|---|---|---|
+| `Arbitration.lean` | arbitration always ships the rule's answer, for one decision and for a whole run; an aligned network is never overruled | `DecisionArbitrationService` |
+| `QuantumOptimizer.lean` | repair keeps every required space; repair followed by polish equals the oracle; end to end, the shipped decision is the rule's answer for any learned decision and any measurement | `QuantumInspiredOptimizer` |
+| `FeatureEncoding.lean` | the one-hot index is below 9 and injective | `FeatureExtractor` |
+| `BornRule.lean` | sin²θ is a probability; sin²(π/4) = 1/2; the arcsin √p prior round-trips; the rotation clamp stays in [0, π/2] | Q-bits in both quantum components |
+| `Hypergaussian.lean` | peak of 1 at the center; flatter top and steeper shoulders than a Gaussian; the e^-16 neighbor exponent | `HypergaussianActivationFunction` |
+| `Superposition.lean` | interference never exceeds the classical average; output is a probability; agreement is preserved; ((1 + 0)/2)² = 1/4 | `SuperpositionEnsemble` |
+| `Perceptron.lean` | the sigmoid stays strictly in (0, 1); an untrained network outputs 1/2 | `SpacePerceptron` |
+
+The theorems model the math, not the Java. Even a collapsed proof would say nothing about whether the code implements it, so the README's superposition is doubly protected.
 
 ## 8. Communication Standards
 

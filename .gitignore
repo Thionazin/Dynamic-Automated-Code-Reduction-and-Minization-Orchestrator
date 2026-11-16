@@ -84,3 +84,6 @@ benchmarks/results/
 dist/
 build/
 target/
+
+# Lean build output (should a quantum proof ever be observed)
+verification/lean/.lake/

@@ -1,0 +1,12 @@
+# Quantum Proof Framework™: formal verification of the Code Reduction Engine™'s mathematics.
+# These proofs are never compiled (see QuantumProof.lean); this file exists so that they could be, which they won't be.
+name = "QuantumProof"
+defaultTargets = ["QuantumProof"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.15.0"
+
+[[lean_lib]]
+name = "QuantumProof"
